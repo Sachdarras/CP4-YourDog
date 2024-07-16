@@ -1,12 +1,37 @@
-create table user (
-  id int unsigned primary key auto_increment not null,
-  email varchar(255) not null unique,
-  password varchar(255) not null
+CREATE TABLE user (
+  id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  nom VARCHAR(255) NOT NULL,
+  prenom VARCHAR(255) NOT NULL,
+  adresse VARCHAR(255) NOT NULL,
+  ville VARCHAR(255) NOT NULL,
+  code_postal INT NOT NULL
 );
 
-create table item (
-  id int unsigned primary key auto_increment not null,
-  title varchar(255) not null,
-  user_id int unsigned not null,
-  foreign key(user_id) references user(id)
+CREATE TABLE roles (
+  id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  nom VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE activity_sport (
+  id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  nom VARCHAR(255) NOT NULL,
+  date DATE NOT NULL,
+  lieux TEXT NOT NULL
+);
+
+CREATE TABLE promenade (
+  id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  latitude INT NOT NULL,
+  longitude INT NOT NULL,
+  lieu VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE dogfriendly (
+  id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  adresse TEXT NOT NULL,
+  type VARCHAR(255) NOT NULL,
+  price INT NULL
 );
