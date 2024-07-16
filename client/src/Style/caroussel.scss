@@ -1,0 +1,59 @@
+@use "../Style/Variable.scss" as *;
+
+.carousel-container {
+  width: 90%;
+  height: 75vh;
+  margin: 40px auto;
+  position: relative;
+}
+
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel .slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.carousel .slide.active {
+  opacity: 1;
+}
+
+.carousel .slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel .legend {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 215, 0, 0.7);
+  padding: 10px;
+  box-sizing: border-box;
+  color: white;
+  text-align: center;
+}
+
+.carousel .legend h3 {
+  font-size: 32px;
+  margin-bottom: 5px;
+  color: $color-gold;
+  text-shadow: $text-entourage-black;
+}
+
+.carousel .legend p {
+  font-size: 25px;
+  margin: 0;
+  text-shadow: $text-entourage-black;
+}
