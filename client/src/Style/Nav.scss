@@ -2,7 +2,6 @@
 
 .nav-container {
   background-color: $color-gold;
-  border-radius: 10px;
 
   ul {
     font-family: $font-LM;
@@ -17,15 +16,18 @@
 
   ul li a {
     display: block;
-    color: $color-blue;
+    color: $color-white;
     text-align: center;
     padding: 20px;
     text-decoration: none;
     border-radius: 10px;
+    text-shadow: $text-entourage-black;
+    font-size: 24px;
   }
 
   ul li a:hover {
-    background-color: $color-blue;
+    background-color: $color-white;
     color: $color-gold;
+    text-shadow: $text-entourage-black;
   }
 }

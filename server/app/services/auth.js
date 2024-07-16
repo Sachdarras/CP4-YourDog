@@ -1,4 +1,5 @@
 const argon2 = require("argon2");
+
 const jwt = require("jsonwebtoken");
 
 // Options de hachage (voir documentation : https://github.com/ranisalt/node-argon2/wiki/Options)

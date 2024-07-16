@@ -1,4 +1,7 @@
+@use "./Style/Variable.scss" as *;
+
 @import url(./Style/Nav.scss);
+@import url(./Style/Acceuil.scss);
 
 html,
 body {
@@ -7,4 +10,17 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-LM;
+}
+
+p {
+  font-family: $font-roboto;
 }
