@@ -9,13 +9,13 @@ function Nav() {
         </li>
 
         <li>
-          <Link to="/event">Événements</Link>
+          <Link to="/event">Lieux de promenade</Link>
         </li>
         <li>
-          <Link to="/pro">Le coin des pros</Link>
+          <Link to="/pro">Lieux Dog-friendly</Link>
         </li>
         <li>
-          <Link to="/activity">Activité Canines</Link>
+          <Link to="/activity">Activité/Sports</Link>
         </li>
         <li>
           <Link to="/loggin">Se connecter</Link>

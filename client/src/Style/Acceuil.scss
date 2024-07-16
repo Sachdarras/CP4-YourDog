@@ -1,0 +1,28 @@
+@use "../Style/Variable.scss" as *;
+
+.header-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url(../assets/Image/paw-7231300_1280.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+
+  width: auto;
+  height: 800px;
+}
+.header-container h1 {
+  color: $color-white;
+  font-size: 64px;
+  font-weight: bold;
+  text-shadow: $text-entourage-black;
+}
+
+.header-container p {
+  font-size: 45px;
+  color: $color-gold;
+  font-weight: bold;
+  text-shadow: $text-entourage-black;
+}

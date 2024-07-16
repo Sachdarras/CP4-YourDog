@@ -1,5 +1,9 @@
 // Import the repository modules responsible for handling data operations on the tables
-const ItemRepository = require("./models/ItemRepository");
+const UserRepository = require("./models/UserRepository");
+const RolesRepository = require("./models/RoleRepository");
+const ActivitySportRepository = require("./models/ActivitySportRepository");
+const PromenadeRepository = require("./models/PromenadeRepository");
+const DogFriendlyRepository = require("./models/DogFriendlyRepository");
 
 // Create an empty object to hold data repositories for different tables
 const tables = {};
@@ -9,7 +13,11 @@ const tables = {};
 /* ************************************************************************* */
 
 // Register each repository as data access point for its table
-tables.item = new ItemRepository();
+tables.user = new UserRepository();
+tables.roles = new RolesRepository();
+tables.activity_sport = new ActivitySportRepository();
+tables.promenade = new PromenadeRepository();
+tables.dogfriendly = new DogFriendlyRepository();
 
 /* ************************************************************************* */
 
