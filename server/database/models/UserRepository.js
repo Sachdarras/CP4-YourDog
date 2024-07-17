@@ -1,3 +1,4 @@
+const argon2 = require("argon2");
 const AbstractRepository = require("./AbstractRepository");
 
 class UserRepository extends AbstractRepository {
@@ -6,54 +7,54 @@ class UserRepository extends AbstractRepository {
   }
 
   async create(user) {
+    const { email, password, nom, prenom, adresse, ville, codePostal } = user;
+
+    const hashedPassword = await argon2.hash(password); // Hashage du mot de passe
+
     const [result] = await this.database.query(
-      `insert into ${this.table} (email, password, nom, prenom, adresse, ville, code_postal) values (?, ?, ?, ?, ?, ?, ?)`,
-      [
-        user.email,
-        user.password,
-        user.nom,
-        user.prenom,
-        user.adresse,
-        user.ville,
-        user.code_postal,
-      ]
+      `INSERT INTO ${this.table} (email, password, nom, prenom, adresse, ville, code_postal) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [email, hashedPassword, nom, prenom, adresse, ville, codePostal]
     );
+
     return result.insertId;
+  }
+
+  async update(id, user) {
+    const { email, password, nom, prenom, adresse, ville, codePostal } = user;
+
+    // Vérifie si le mot de passe a été fourni et le hash s'il est présent
+    if (password) {
+      const hashedPassword = await argon2.hash(password); // Hashage du mot de passe
+      const [result] = await this.database.query(
+        `UPDATE ${this.table} SET email = ?, password = ?, nom = ?, prenom = ?, adresse = ?, ville = ?, code_postal = ? WHERE id = ?`,
+        [email, hashedPassword, nom, prenom, adresse, ville, codePostal, id]
+      );
+      return result.affectedRows;
+    }
+
+    const [result] = await this.database.query(
+      `UPDATE ${this.table} SET email = ?, nom = ?, prenom = ?, adresse = ?, ville = ?, code_postal = ? WHERE id = ?`,
+      [email, nom, prenom, adresse, ville, codePostal, id]
+    );
+    return result.affectedRows;
   }
 
   async read(id) {
     const [rows] = await this.database.query(
-      `select * from ${this.table} where id = ?`,
+      `SELECT * FROM ${this.table} WHERE id = ?`,
       [id]
     );
     return rows[0];
   }
 
   async readAll() {
-    const [rows] = await this.database.query(`select * from ${this.table}`);
+    const [rows] = await this.database.query(`SELECT * FROM ${this.table}`);
     return rows;
-  }
-
-  async update(id, user) {
-    const [result] = await this.database.query(
-      `update ${this.table} set email = ?, password = ?, nom = ?, prenom = ?, adresse = ?, ville = ?, code_postal = ? where id = ?`,
-      [
-        user.email,
-        user.password,
-        user.nom,
-        user.prenom,
-        user.adresse,
-        user.ville,
-        user.code_postal,
-        id,
-      ]
-    );
-    return result.affectedRows;
   }
 
   async delete(id) {
     const [result] = await this.database.query(
-      `delete from ${this.table} where id = ?`,
+      `DELETE FROM ${this.table} WHERE id = ?`,
       [id]
     );
     return result.affectedRows;

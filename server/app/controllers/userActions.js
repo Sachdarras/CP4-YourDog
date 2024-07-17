@@ -1,6 +1,30 @@
 const tables = require("../../database/tables");
+const { hashPassword } = require("../services/auth");
 
 // The B of BREAD - Browse (Read All) operation
+const register = async (req, res, next) => {
+  try {
+    const { nom, prenom, birthday, adresse, ville, codepostal, email } =
+      req.body;
+
+    const newUser = {
+      nom,
+      prenom,
+      birthday,
+      adresse,
+      ville,
+      codePostal: codepostal, // Renommage en camelCase
+      email,
+      password: await hashPassword(req.hashedPassword), // Utilisation du mot de passe hashé ici
+    };
+
+    const insertId = await tables.user.create(newUser);
+    res.status(201).json({ insertId });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const browse = async (req, res, next) => {
   try {
     const users = await tables.user.readAll();
@@ -70,4 +94,5 @@ module.exports = {
   add,
   edit,
   destroy,
+  register,
 };
