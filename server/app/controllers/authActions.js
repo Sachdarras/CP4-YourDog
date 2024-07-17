@@ -1,7 +1,5 @@
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
-
-// Import access to database tables
 const tables = require("../../database/tables");
 
 const login = async (req, res, next) => {
@@ -14,35 +12,34 @@ const login = async (req, res, next) => {
       return;
     }
 
-    const verified = await argon2.verify(
-      user.hashed_password,
-      req.body.password
+    const verified = await argon2.verify(user.password, req.body.password);
+
+    if (!verified) {
+      res.sendStatus(401);
+      return;
+    }
+
+    // Respond with the user and a signed token in JSON format (but without the hashed password)
+    delete user.password;
+
+    const token = jwt.sign(
+      { userId: user.id, rolesId: user.roles_id },
+      process.env.APP_SECRET,
+      {
+        expiresIn: "1h",
+      }
     );
 
-    if (verified) {
-      // Respond with the user and a signed token in JSON format (but without the hashed password)
-      delete user.hashed_password;
-
-      const token = await jwt.sign(
-        { userId: user.id, rolesId: user.roles_id },
-        process.env.APP_SECRET,
-        {
-          expiresIn: "1h",
-        }
-      );
-
-      res.json({
-        token,
-        user,
-      });
-    } else {
-      res.sendStatus(420);
-    }
+    res.json({
+      token,
+      user,
+    });
   } catch (err) {
     // Pass any errors to the error-handling middleware
     next(err);
   }
 };
+
 const add = async (req, res, next) => {
   // Extract the user data from the request body
   const user = req.body;

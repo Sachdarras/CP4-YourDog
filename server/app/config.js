@@ -1,58 +1,32 @@
-// Chargez le module express pour créer une application web
 const express = require("express");
+
+const cors = require("cors");
 
 const app = express();
 
-// Gestion CORS
-const cors = require("cors");
-
+// Gestion CORS pour autoriser les requêtes depuis votre frontend React
 app.use(
   cors({
-    origin: [
-      process.env.CLIENT_URL, // Garder cette ligne après avoir vérifié la valeur dans `server/.env`
-    ],
+    origin: process.env.CLIENT_URL, // Définissez cette variable dans votre .env
+    methods: ["GET", "POST", "PUT", "DELETE"], // Ajoutez les méthodes que vous utilisez
+    allowedHeaders: ["Content-Type", "Authorization"], // Ajoutez les headers nécessaires
   })
 );
 
-// Analyse des requêtes
+// Middleware pour analyser le corps des requêtes en JSON
 app.use(express.json());
-// app.use(express.urlencoded());
-// app.use(express.text());
-// app.use(express.raw());
 
-// Cookies
-// Pour utiliser `cookie-parser`, assurez-vous qu'il est installé dans `server/package.json`
-// const cookieParser = require("cookie-parser");
-// app.use(cookieParser());
-
-// Import du routeur API
+// Importez votre routeur API
 const apiRouter = require("./routers/api/router");
 
 app.use("/api", apiRouter);
 
-// Configuration de production
+// Middleware de gestion des erreurs (facultatif)
 /*
-const path = require("path");
-
-const reactBuildPath = path.join(__dirname, "/../../client/dist");
-const publicFolderPath = path.join(__dirname, "/../public");
-
-app.use(express.static(reactBuildPath));
-app.get("*.*", express.static(publicFolderPath, { maxAge: "1y" }));
-app.get("*", (_, res) => {
-  res.sendFile(path.join(reactBuildPath, "/index.html"));
-});
-*/
-
-// Middleware de gestion des erreurs
-/*
-const logErrors = (err, req, res, next) => {
+app.use((err, req, res, next) => {
   console.error(err);
-  console.error("sur req:", req.method, req.path);
-  next(err);
-};
-
-app.use(logErrors);
+  res.status(500).json({ error: "Internal Server Error" });
+});
 */
 
 module.exports = app;
