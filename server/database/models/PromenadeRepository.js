@@ -7,8 +7,14 @@ class PromenadeRepository extends AbstractRepository {
 
   async create(promenade) {
     const [result] = await this.database.query(
-      `insert into ${this.table} (latitude, longitude, lieu, name) values (?, ?, ?, ?)`,
-      [promenade.latitude, promenade.longitude, promenade.lieu, promenade.name]
+      `insert into ${this.table} (latitude, longitude, lieu,description, name) values (?, ?, ?, ?, ?)`,
+      [
+        promenade.latitude,
+        promenade.longitude,
+        promenade.lieu,
+        promenade.description,
+        promenade.name,
+      ]
     );
     return result.insertId;
   }
