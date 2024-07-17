@@ -42,7 +42,7 @@ function LoginForm() {
       notifyUser();
 
       setTimeout(() => {
-        navigate(`/Profil/${userData.user.id}`);
+        navigate("/");
       }, 2000);
     } catch (error) {
       console.error("Erreur lors de la connexion :", error);

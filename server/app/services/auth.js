@@ -9,12 +9,24 @@ const hashingOptions = {
   parallelism: 1,
 };
 
+// Fonction pour enregistrer un nouvel utilisateur
+const register = async (userData) => {
+  const { email, hashedPassword } = userData;
+
+  // Exemple de logique d'enregistrement dans la base de données
+  // const newUser = await User.create({ email, hashedPassword });
+  // return newUser;
+
+  // Pour l'exemple, nous allons simplement renvoyer les données d'utilisateur fournies
+  return { email, hashedPassword }; // Inclure hashedPassword ici
+};
+
 // Middleware de hachage du mot de passe
 const hashPassword = async (req, res, next) => {
   try {
     const { password } = req.body;
     const hashedPassword = await argon2.hash(password, hashingOptions);
-    req.hashedPassword = hashedPassword;
+    req.body.hashedPassword = hashedPassword; // Stocker le mot de passe haché dans req.body.hashedPassword
     next();
   } catch (err) {
     next(err);
@@ -48,6 +60,7 @@ const currentUser = (req, res, next) => {
 };
 
 module.exports = {
+  register,
   hashPassword,
   verifyToken,
   currentUser,
