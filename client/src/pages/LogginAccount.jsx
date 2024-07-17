@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -44,7 +44,7 @@ function LogginAccount() {
         `${import.meta.env.VITE_API_URL}/api/users`,
         newUser
       );
-      setUser(response.data); // Met à jour l'état de l'utilisateur avec les données reçues
+      setUser(response.data);
       notifySuccess();
       setShowConfirmation(true);
     } catch (error) {
@@ -52,6 +52,19 @@ function LogginAccount() {
       notifyError();
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      // Mettre à jour les états avec les données de l'utilisateur après création du compte
+      setNom(user.nom || "");
+      setPrenom(user.prenom || "");
+      setBirthday(user.birthday || "");
+      setAdresse(user.adresse || "");
+      setVille(user.ville || "");
+      setCodePostal(user.codePostal || "");
+      setEmail(user.email || "");
+    }
+  }, [user]);
 
   return (
     <div>
@@ -177,32 +190,21 @@ function LogginAccount() {
             S'enregistrer
           </button>
         )}
-        {showConfirmation &&
-          user && ( // Vérifiez que 'user' est défini avant de l'afficher
-            <div className="confirmation-message">
-              <div className="card">
-                <h2 className="user-greeting">Bienvenue !</h2>
-                <p className="user-greeting">
-                  Votre compte a été créé avec succès. Voici les détails de
-                  votre compte :
-                  <ul>
-                    <li>Nom: {user.nom}</li>
-                    <li>Prénom: {user.prenom}</li>
-                    <li>Date de naissance: {user.birthday}</li>
-                    <li>
-                      Adresse: {user.adresse}, {user.ville} {user.codePostal}
-                    </li>
-                    <li>E-mail: {user.email}</li>
-                  </ul>
-                </p>
-                <Link to="/loggin">
-                  <button className="account-log" type="button">
-                    Se connecter
-                  </button>
-                </Link>
-              </div>
+        {showConfirmation && user && (
+          <div className="confirmation-message">
+            <div className="card">
+              <h2 className="user-greeting">Bienvenue !</h2>
+              <p className="user-greeting">
+                Votre compte a été créé avec succès.
+              </p>
+              <Link to="/loggin">
+                <button className="account-log" type="button">
+                  Se connecter
+                </button>
+              </Link>
             </div>
-          )}
+          </div>
+        )}
       </form>
       <Toaster />
     </div>
