@@ -28,13 +28,14 @@ CREATE TABLE activity_sport (
 
 CREATE TABLE promenade (
   id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
-  latitude INT NOT NULL,
-  longitude INT NOT NULL,
+  latitude DECIMAL(25, 15) NOT NULL, 
+  longitude DECIMAL(25, 15) NOT NULL,
   lieu VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
-
   name VARCHAR(255) NOT NULL
 );
+INSERT INTO promenade (latitude, longitude, lieu, description, name) 
+VALUES (48.039146123639554, -4.473767291890532, 'Pont Croix', 'Balade entre forêt et champ au bord de la rivière du Goyen', 'Kermaria');
 
 CREATE TABLE dogfriendly (
   id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
