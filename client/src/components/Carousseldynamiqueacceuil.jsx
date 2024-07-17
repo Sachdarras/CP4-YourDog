@@ -9,7 +9,7 @@ function CarouselDynamiqueAcceuil() {
       setCurrentSlide((prevSlide) =>
         prevSlide === dataAcceuille.length - 1 ? 0 : prevSlide + 1
       );
-    }, 3000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 

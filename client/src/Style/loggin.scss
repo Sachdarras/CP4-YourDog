@@ -1,0 +1,100 @@
+@use "../Style/Variable.scss" as *;
+
+.header-loggin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url(../assets/Image/paw-7231300_1280.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  width: auto;
+  height: 800px;
+}
+
+.header-loggin h1 {
+  color: $color-white;
+  font-size: 64px;
+  font-weight: bold;
+  text-shadow: $text-entourage-black;
+}
+
+.header-loggin p {
+  font-size: 45px;
+  color: $color-gold;
+  font-weight: bold;
+  text-shadow: $text-entourage-black;
+  text-align: center;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 600px;
+  margin: 100px auto;
+  padding: 40px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: $font-roboto;
+  font-size: 34px;
+}
+
+.form-group {
+  margin-bottom: 30px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: $color-gold;
+  text-shadow: $text-entourage-black;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 18px;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  border-color: $color-gold;
+  outline: none;
+}
+
+.login-button {
+  width: 100%;
+  padding: 15px 20px;
+  background-color: $color-gold;
+  border: none;
+  border-radius: 5px;
+  color: $color-white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: $font-LM;
+}
+
+.login-button:hover {
+  background-color: $color-white;
+  color: $color-gold;
+}
+
+.login-account {
+  display: block;
+  margin-top: 30px;
+  text-align: center;
+  color: $color-gold;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.login-account:hover {
+  color: darken($color-gold, 10%);
+  text-shadow: $text-entourage-black;
+}

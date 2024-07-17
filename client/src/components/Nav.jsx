@@ -9,10 +9,10 @@ function Nav() {
         </li>
 
         <li>
-          <Link to="/event">Lieux de promenade</Link>
+          <Link to="/promenade">Lieux de promenade</Link>
         </li>
         <li>
-          <Link to="/pro">Lieux Dog-friendly</Link>
+          <Link to="/dog_friendly">Lieux Dog-friendly</Link>
         </li>
         <li>
           <Link to="/activity">Activité/Sports</Link>

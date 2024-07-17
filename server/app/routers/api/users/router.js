@@ -2,28 +2,31 @@ const express = require("express");
 
 const router = express.Router();
 
-// Import user-related actions
+const { hashPassword } = require("../../../services/auth"); // Import du middleware hashPassword
 const {
   browse,
   read,
-  add,
   edit,
+  add,
   destroy,
 } = require("../../../controllers/userActions");
 
-// Route to get a list of users
+// Route pour obtenir une liste d'utilisateurs
 router.get("/", browse);
 
-// Route to get a specific user by ID
+// Route pour obtenir un utilisateur spécifique par ID
 router.get("/:id", read);
 
-// Route to add a new user
-router.post("/", add);
-
-// Route to update a user by ID
+// Route pour mettre à jour un utilisateur par ID
 router.put("/:id", edit);
 
-// Route to delete a user by ID
+// Route pour ajouter un nouvel utilisateur
+router.post("/", add);
+
+// Route pour enregistrer un nouvel utilisateur avec hashage du mot de passe
+router.post("/register", hashPassword, add); // Utilisation de hashPassword avant la fonction add
+
+// Route pour supprimer un utilisateur par ID
 router.delete("/:id", destroy);
 
 module.exports = router;
