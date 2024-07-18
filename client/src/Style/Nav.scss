@@ -1,3 +1,5 @@
+// src/Style/NavStyles.scss
+
 @use "../Style/Variable.scss" as *;
 
 .nav-container {
@@ -14,7 +16,8 @@
     align-items: center;
   }
 
-  ul li a {
+  ul li a,
+  ul li .nav-link {
     display: block;
     color: $color-white;
     text-align: center;
@@ -23,11 +26,19 @@
     border-radius: 10px;
     text-shadow: $text-entourage-black;
     font-size: 24px;
+    font-family: $font-LM;
   }
 
-  ul li a:hover {
+  ul li a:hover,
+  ul li .nav-link:hover {
     background-color: $color-white;
     color: $color-gold;
     text-shadow: $text-entourage-black;
+  }
+
+  .nav-link {
+    background: none;
+    border: none;
+    cursor: pointer;
   }
 }
