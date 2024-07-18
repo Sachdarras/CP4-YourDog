@@ -1,6 +1,6 @@
-// src/contexte/AuthContext.jsx
 import { createContext, useState, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
+import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
 
@@ -19,7 +19,7 @@ export function AuthProvider({ children }) {
   const [rolesId, setRolesId] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = Cookies.get("auth_token");
     if (token) {
       const decodedToken = decodeToken(token);
 
@@ -34,7 +34,7 @@ export function AuthProvider({ children }) {
   const login = (token) => {
     const decodedToken = decodeToken(token);
     if (decodedToken) {
-      localStorage.setItem("token", token);
+      Cookies.set("auth_token", token, { secure: true, sameSite: "strict" });
       setIsAuthenticated(true);
       const id = decodedToken.rolesId;
       setRolesId(id);
@@ -42,7 +42,7 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    Cookies.remove("auth_token");
     setIsAuthenticated(false);
     setRolesId(null);
   };

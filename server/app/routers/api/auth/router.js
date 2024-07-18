@@ -4,6 +4,7 @@ const router = express.Router();
 
 const { login } = require("../../../controllers/authActions");
 
-router.post("/", login);
+// Route POST pour gérer la connexion (login)
+router.post("/login", login);
 
 module.exports = router;
