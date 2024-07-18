@@ -50,8 +50,7 @@ function Promenade() {
     e.preventDefault();
 
     if (!isAuthenticated) {
-      navigate("/loggin"); // Redirigez les utilisateurs non authentifiés vers la page de connexion
-      return;
+      navigate("/loggin");
     }
 
     const latitude = parseFloat(formData.latitude);
