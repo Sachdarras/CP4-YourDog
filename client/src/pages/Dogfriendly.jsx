@@ -1,15 +1,20 @@
-import { useState, useEffect, useContext } from "react"; // 'React' is removed because it's not used
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMapEvents,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import PropTypes from "prop-types";
 import { AuthContext } from "../context/AuthContext";
 
-// Remove this if it's not causing issues
-// delete L.Icon.Default.prototype._getIconUrl;
-
+// Merge options for Leaflet marker icons
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
     "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
@@ -17,8 +22,10 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
+// Cache for geocoding results
 const geocodeCache = new Map();
 
+// Function to geocode an address using OpenStreetMap Nominatim API
 const geocodeAddress = async (address, ville, codePostal) => {
   try {
     const query = `${encodeURIComponent(address)}, ${encodeURIComponent(
@@ -30,7 +37,7 @@ const geocodeAddress = async (address, ville, codePostal) => {
     const data = await response.json();
 
     if (data && data.length > 0) {
-      const { lat, lon, display_name: displayName } = data[0]; // Use camelCase
+      const { lat, lon, display_name: displayName } = data[0];
       const [adresse, city, postalCode] = displayName
         .split(",")
         .slice(0, 3)
@@ -53,6 +60,30 @@ const geocodeAddress = async (address, ville, codePostal) => {
   }
 };
 
+// Function to reverse geocode using OpenStreetMap Nominatim API
+const reverseGeocode = async (lat, lon) => {
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+    );
+    const data = await response.json();
+
+    if (data && data.address) {
+      const { road, city, postcode } = data.address;
+      return {
+        address: road || "",
+        ville: city || "",
+        codePostal: postcode || "",
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error("Erreur de géocodage inversé:", error);
+    return null;
+  }
+};
+
+// Function to reverse geocode postal code using GeoNames API
 const reverseGeocodePostalCode = async (postalCode) => {
   try {
     const response = await axios.get(
@@ -74,6 +105,7 @@ const reverseGeocodePostalCode = async (postalCode) => {
   }
 };
 
+// List of place types
 const placeTypes = [
   "Camping",
   "Hôtel",
@@ -85,6 +117,27 @@ const placeTypes = [
   "Airbnb",
   "Autre",
 ];
+
+function MapClickHandler({ onClick }) {
+  useMapEvents({
+    click: async (e) => {
+      const { lat, lng } = e.latlng;
+      const addressData = await reverseGeocode(lat, lng);
+      if (addressData) {
+        onClick({
+          address: addressData.address,
+          ville: addressData.ville,
+          codePostal: addressData.codePostal,
+        });
+      }
+    },
+  });
+  return null;
+}
+
+MapClickHandler.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
 
 function DogFriendly() {
   const [address, setAddress] = useState("");
@@ -100,6 +153,7 @@ function DogFriendly() {
 
   const { isAuthenticated } = useContext(AuthContext);
 
+  // Function to fetch data from the API
   const fetchData = async () => {
     setLoading(true);
 
@@ -141,10 +195,12 @@ function DogFriendly() {
     }
   };
 
+  // Fetch data on component mount
   useEffect(() => {
     fetchData();
   }, []);
 
+  // Function to handle adding a new location
   const handleAddLocation = async () => {
     const newLocation = {
       name,
@@ -210,6 +266,7 @@ function DogFriendly() {
     }
   };
 
+  // Function to handle change in postal code
   const handlePostalCodeChange = async (e) => {
     const newPostalCode = e.target.value;
     setCodePostal(newPostalCode);
@@ -244,7 +301,7 @@ function DogFriendly() {
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             />
             {locations.map((location) => (
-              <Marker key={location.codePostal} position={location.position}>
+              <Marker key={location.name} position={location.position}>
                 <Popup>
                   <div>
                     <h3>{location.name}</h3>
@@ -259,6 +316,13 @@ function DogFriendly() {
                 </Popup>
               </Marker>
             ))}
+            <MapClickHandler
+              onClick={(addressData) => {
+                setAddress(addressData.address);
+                setVille(addressData.ville);
+                setCodePostal(addressData.codePostal);
+              }}
+            />
           </MapContainer>
         )}
 
