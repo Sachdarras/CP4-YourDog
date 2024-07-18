@@ -1,5 +1,11 @@
 import { useEffect, useState, useContext } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMapEvents,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import axios from "axios";
@@ -27,8 +33,8 @@ function Promenade() {
     name: "",
   });
 
-  const { isAuthenticated } = useContext(AuthContext); // Utilisez le contexte d'authentification
-  const navigate = useNavigate(); // Utilisez useNavigate pour rediriger les utilisateurs
+  const { isAuthenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -50,7 +56,7 @@ function Promenade() {
     e.preventDefault();
 
     if (!isAuthenticated) {
-      navigate("/loggin"); // Redirigez les utilisateurs non authentifiés vers la page de connexion
+      navigate("/loggin");
       return;
     }
 
@@ -85,6 +91,21 @@ function Promenade() {
         toast.error("Erreur lors de l'ajout de la promenade");
       });
   };
+
+  function LocationMarker() {
+    const map = useMapEvents({
+      click(e) {
+        setFormData({
+          ...formData,
+          latitude: e.latlng.lat,
+          longitude: e.latlng.lng,
+        });
+        map.flyTo(e.latlng, map.getZoom());
+      },
+    });
+
+    return null;
+  }
 
   return (
     <>
@@ -124,12 +145,18 @@ function Promenade() {
               </Popup>
             </Marker>
           ))}
+
+          <LocationMarker />
         </MapContainer>
 
         <div className="form-container">
-          {isAuthenticated ? ( // Vérifiez si l'utilisateur est authentifié avant d'afficher le formulaire
+          {isAuthenticated ? (
             <form onSubmit={handleSubmit} className="promenade-form">
               <h2>Proposer une promenade</h2>
+              <p>
+                Cliquez sur la carte pour ajouter les points de latitude et
+                longitude au formulaire.
+              </p>
               <div className="form-group">
                 <label>
                   Latitude:
