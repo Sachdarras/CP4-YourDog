@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import Cookies from "js-cookie";
 import { AuthContext } from "../context/AuthContext";
 
 function LoginForm() {
@@ -20,7 +21,7 @@ function LoginForm() {
   const handleValidation = async (e) => {
     e.preventDefault();
     try {
-      const loginUrl = `${import.meta.env.VITE_API_URL}/api/auths`;
+      const loginUrl = `${import.meta.env.VITE_API_URL}/api/auth/login`;
 
       const response = await fetch(loginUrl, {
         method: "POST",
@@ -36,9 +37,19 @@ function LoginForm() {
       }
 
       const userData = await response.json();
+
+      // Stocker le token JWT dans un cookie nommé "auth_token"
+      Cookies.set("auth_token", userData.token, {
+        expires: 1,
+        sameSite: "strict",
+      });
+
+      // Mettre à jour le contexte d'authentification avec le token
       login(userData.token);
 
+      // Stocker les informations utilisateur dans localStorage
       localStorage.setItem("user", JSON.stringify(userData.user));
+
       notifyUser();
 
       setTimeout(() => {

@@ -1,5 +1,6 @@
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
+const tables = require("../../database/tables");
 
 // Options de hachage
 const hashingOptions = {
@@ -33,14 +34,13 @@ const hashPassword = async (req, res, next) => {
   }
 };
 
-// Middleware de vérification du token JWT
+// Middleware de vérification du token JWT dans les cookies
 const verifyToken = (req, res, next) => {
   try {
-    const authorizationHeader = req.get("Authorization");
-    if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
-      throw new Error("Authorization header is missing or invalid");
+    const token = req.cookies.auth_token; // Récupérer le token des cookies
+    if (!token) {
+      throw new Error("Token is missing");
     }
-    const token = authorizationHeader.split(" ")[1];
     const decodedToken = jwt.verify(token, process.env.APP_SECRET);
     req.auth = decodedToken;
     next();
@@ -59,9 +59,47 @@ const currentUser = (req, res, next) => {
   }
 };
 
+// Fonction pour trouver un utilisateur par email
+const findUserByEmail = async (email) => {
+  try {
+    const user = await tables.user.readByEmail(email);
+    return user;
+  } catch (error) {
+    console.error("Error finding user by email:", error);
+    throw new Error("Failed to find user by email");
+  }
+};
+
+// Fonction de connexion pour générer et définir le cookie JWT
+const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Récupère l'utilisateur depuis la base de données en utilisant l'email
+    const user = await findUserByEmail(email);
+
+    if (user && (await argon2.verify(user.hashedPassword, password))) {
+      const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
+        expiresIn: "1h",
+      });
+      res.cookie("auth_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      });
+      res.status(200).json({ message: "Logged in successfully" });
+    } else {
+      res.status(401).json({ message: "Invalid credentials" });
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   register,
   hashPassword,
   verifyToken,
   currentUser,
+  login,
 };

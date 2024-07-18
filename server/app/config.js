@@ -1,27 +1,32 @@
 const express = require("express");
-
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const apiRouter = require("./routers/api/router");
+const authRouter = require("./routers/api/auth/router"); // Assurez-vous du chemin correct
 
 const app = express();
 
-// Gestion CORS pour autoriser les requêtes depuis votre frontend React
+// Middleware CORS
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, // Définissez cette variable dans votre .env
-    methods: ["GET", "POST", "PUT", "DELETE"], // Ajoutez les méthodes que vous utilisez
-    allowedHeaders: ["Content-Type", "Authorization"], // Ajoutez les headers nécessaires
+    origin: process.env.CLIENT_URL,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // Permet l'utilisation des cookies avec les requêtes cross-origin
   })
 );
 
 // Middleware pour analyser le corps des requêtes en JSON
 app.use(express.json());
 
-// Importez votre routeur API
-const apiRouter = require("./routers/api/router");
+// Middleware pour analyser les cookies
+app.use(cookieParser());
 
+// Utilisation des routeurs
 app.use("/api", apiRouter);
+app.use("/auth", authRouter); // Utilise le routeur d'authentification
 
-// Middleware de gestion des erreurs (facultatif)
+// Gestion des erreurs (facultatif)
 /*
 app.use((err, req, res, next) => {
   console.error(err);
