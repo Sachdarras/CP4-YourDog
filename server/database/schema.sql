@@ -40,10 +40,22 @@ VALUES (48.039146123639554, -4.473767291890532, 'Pont Croix', 'Balade entre for�
 
 CREATE TABLE dogfriendly (
   id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
-  adresse TEXT NOT NULL,
+   name VARCHAR(255) NOT NULL,
   type VARCHAR(255) NOT NULL,
+  adresse TEXT NOT NULL,
+  ville VARCHAR(255) NOT NULL,
+  code_postal INT NOT NULL,
   description TEXT NOT NULL,
-  name VARCHAR(255) NOT NULL,
   price INT NULL
+);
+INSERT INTO dogfriendly (name, type, adresse, ville, code_postal, description, price)
+VALUES (
+  'Camping le loup blanc',
+  'camping',
+  '13 Rue de l\'Océan',
+  'Plouhinec',
+  29780,
+  'Camping à 5 min de l\'océan sous les arbres, cadre très agréable et nos amis à 4 pattes sont les bienvenus.',
+  NULL
 );
 

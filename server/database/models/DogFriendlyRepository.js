@@ -6,37 +6,41 @@ class DogFriendlyRepository extends AbstractRepository {
   }
 
   async create(dogfriendly) {
+    const { adresse, ville, codePostal, name, type, description, price } =
+      dogfriendly;
     const [result] = await this.database.query(
-      `insert into ${this.table} (adresse, type, price) values (?, ?, ?)`,
-      [dogfriendly.adresse, dogfriendly.type, dogfriendly.price]
+      `INSERT INTO ${this.table} (adresse, ville, code_postal, name, type, description, price) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [adresse, ville, codePostal, name, type, description, price]
     );
     return result.insertId;
   }
 
   async read(id) {
     const [rows] = await this.database.query(
-      `select * from ${this.table} where id = ?`,
+      `SELECT * FROM ${this.table} WHERE id = ?`,
       [id]
     );
     return rows[0];
   }
 
   async readAll() {
-    const [rows] = await this.database.query(`select * from ${this.table}`);
+    const [rows] = await this.database.query(`SELECT * FROM ${this.table}`);
     return rows;
   }
 
   async update(id, dogfriendly) {
+    const { adresse, ville, codePostal, name, type, description, price } =
+      dogfriendly;
     const [result] = await this.database.query(
-      `update ${this.table} set adresse = ?, type = ?, price = ? where id = ?`,
-      [dogfriendly.adresse, dogfriendly.type, dogfriendly.price, id]
+      `UPDATE ${this.table} SET adresse = ?, ville = ?, code_postal = ?, name = ?, type = ?, description = ?, price = ? WHERE id = ?`,
+      [adresse, ville, codePostal, name, type, description, price, id]
     );
     return result.affectedRows;
   }
 
   async delete(id) {
     const [result] = await this.database.query(
-      `delete from ${this.table} where id = ?`,
+      `DELETE FROM ${this.table} WHERE id = ?`,
       [id]
     );
     return result.affectedRows;
