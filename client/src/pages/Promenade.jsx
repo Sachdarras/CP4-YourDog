@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import { AuthContext } from "../context/AuthContext";
 
 const goldIcon = new L.Icon({
   iconUrl:
@@ -24,6 +27,9 @@ function Promenade() {
     name: "",
   });
 
+  const { isAuthenticated } = useContext(AuthContext); // Utilisez le contexte d'authentification
+  const navigate = useNavigate(); // Utilisez useNavigate pour rediriger les utilisateurs
+
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/api/promenade`)
@@ -42,6 +48,11 @@ function Promenade() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!isAuthenticated) {
+      navigate("/loggin"); // Redirigez les utilisateurs non authentifiés vers la page de connexion
+      return;
+    }
 
     const latitude = parseFloat(formData.latitude);
     const longitude = parseFloat(formData.longitude);
@@ -67,14 +78,17 @@ function Promenade() {
           name: "",
         });
         setSendForm((prev) => !prev);
+        toast.success("Promenade ajoutée avec succès!");
       })
       .catch((error) => {
         console.error("Erreur lors de l'ajout de la promenade:", error);
+        toast.error("Erreur lors de l'ajout de la promenade");
       });
   };
 
   return (
     <>
+      <Toaster />
       <div className="header-promenade">
         <h1>Lieux de Promenade</h1>
         <p>
@@ -84,7 +98,6 @@ function Promenade() {
           nouvelles inspirations pour vos prochaines aventures.
         </p>
       </div>
-
       <div className="promenade-container">
         <MapContainer
           className="map-container"
@@ -105,6 +118,7 @@ function Promenade() {
               <Popup>
                 <div>
                   <h2>{promenade.name}</h2>
+                  <h2>{promenade.lieu}</h2>
                   <p>{promenade.description}</p>
                 </div>
               </Popup>
@@ -113,73 +127,82 @@ function Promenade() {
         </MapContainer>
 
         <div className="form-container">
-          <form onSubmit={handleSubmit} className="promenade-form">
-            <h2>Proposer une promenade</h2>
-            <div className="form-group">
-              <label>
-                Latitude:
-                <input
-                  type="number"
-                  step="any"
-                  name="latitude"
-                  value={formData.latitude}
-                  onChange={handleChange}
-                  required
-                />
-              </label>
+          {isAuthenticated ? ( // Vérifiez si l'utilisateur est authentifié avant d'afficher le formulaire
+            <form onSubmit={handleSubmit} className="promenade-form">
+              <h2>Proposer une promenade</h2>
+              <div className="form-group">
+                <label>
+                  Latitude:
+                  <input
+                    type="number"
+                    step="any"
+                    name="latitude"
+                    value={formData.latitude}
+                    onChange={handleChange}
+                    required
+                  />
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  Longitude:
+                  <input
+                    type="number"
+                    step="any"
+                    name="longitude"
+                    value={formData.longitude}
+                    onChange={handleChange}
+                    required
+                  />
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  Lieu:
+                  <input
+                    type="text"
+                    name="lieu"
+                    value={formData.lieu}
+                    onChange={handleChange}
+                    required
+                  />
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  Description:
+                  <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    required
+                  >
+                    Description{" "}
+                  </textarea>
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  Nom:
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </label>
+              </div>
+              <button type="submit">Proposer</button>
+            </form>
+          ) : (
+            <div>
+              <h2>Vous devez être connecté pour proposer une promenade</h2>
+              <button type="button" onClick={() => navigate("/loggin")}>
+                Se connecter
+              </button>
             </div>
-            <div className="form-group">
-              <label>
-                Longitude:
-                <input
-                  type="number"
-                  step="any"
-                  name="longitude"
-                  value={formData.longitude}
-                  onChange={handleChange}
-                  required
-                />
-              </label>
-            </div>
-            <div className="form-group">
-              <label>
-                Lieu:
-                <input
-                  type="text"
-                  name="lieu"
-                  value={formData.lieu}
-                  onChange={handleChange}
-                  required
-                />
-              </label>
-            </div>
-            <div className="form-group">
-              <label>
-                Description:
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  required
-                >
-                  Description{" "}
-                </textarea>
-              </label>
-            </div>
-            <div className="form-group">
-              <label>
-                Nom:
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </label>
-            </div>
-            <button type="submit">Proposer</button>
-          </form>
+          )}
         </div>
       </div>
     </>
