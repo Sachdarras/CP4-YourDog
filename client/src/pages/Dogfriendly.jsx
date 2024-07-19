@@ -83,7 +83,6 @@ const reverseGeocode = async (lat, lon) => {
   }
 };
 
-// Function to reverse geocode postal code using GeoNames API
 const reverseGeocodePostalCode = async (postalCode) => {
   try {
     const response = await axios.get(

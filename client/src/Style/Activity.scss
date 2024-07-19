@@ -1,0 +1,76 @@
+@use "../Style/Variable.scss" as *;
+
+.activity-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url(../assets/Image/agility.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  width: auto;
+  height: 600px;
+}
+
+.activity-header h1 {
+  color: $color-white;
+  font-size: 64px;
+  font-weight: bold;
+  text-shadow: $text-entourage-black;
+}
+
+.activity-header p {
+  font-size: 35px;
+  margin-top: 50px;
+  color: $color-gold;
+  font-weight: bold;
+  text-shadow: $text-entourage-black;
+  text-align: center;
+}
+
+.activity-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+}
+
+.activity-card {
+  width: 500px;
+  border: 1px solid $color-gold;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 10px 10px 10px rgba(111, 112, 98, 0.5);
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
+
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(8, 8, 7, 0.2);
+  }
+}
+
+.activity-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.activity-card h2 {
+  color: $color-gold;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 15px 0 10px 0;
+  text-shadow: $text-entourage-black;
+}
+
+.activity-card p {
+  font-size: 24px;
+  color: black;
+  margin: 0;
+}
