@@ -6,6 +6,7 @@
   align-items: center;
   padding: 1rem;
   background-color: $color-gold;
+
   p {
     font-family: $font-LM;
     margin: 0.5rem 0;
@@ -21,13 +22,30 @@
     a {
       color: $color-white;
       text-decoration: none;
+      transition:
+        color 0.3s,
+        filter 0.3s;
 
       &:hover {
-        color: #0073b1;
+        filter: drop-shadow(2px 2px 4px black);
       }
 
+      // GitHub icon
       &:nth-child(1):hover {
         color: #333;
+        filter: drop-shadow(3px 3px 6px black);
+      }
+
+      // LinkedIn icon
+      &:nth-child(2):hover {
+        color: #0073b1;
+        filter: drop-shadow(2px 2px 4px #0073b1);
+      }
+
+      // Portfolio icon
+      &:nth-child(3):hover {
+        color: gold;
+        filter: drop-shadow(4px 4px 8px black);
       }
     }
   }
