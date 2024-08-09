@@ -24,7 +24,7 @@ const goldIcon = new L.Icon({
 
 function Promenade() {
   const [promenades, setPromenades] = useState([]);
-  const [sendForm, setSendForm] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     latitude: "",
     longitude: "",
@@ -45,7 +45,7 @@ function Promenade() {
       .catch((error) => {
         console.error("Erreur lors de la récupération des points:", error);
       });
-  }, [sendForm]);
+  }, [showForm]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,7 +83,7 @@ function Promenade() {
           description: "",
           name: "",
         });
-        setSendForm((prev) => !prev);
+        setShowForm(true); // Assure que le formulaire est visible après soumission
         toast.success("Promenade ajoutée avec succès!");
       })
       .catch((error) => {
@@ -120,117 +120,127 @@ function Promenade() {
         </p>
       </div>
       <div className="promenade-container">
-        <MapContainer
-          className="map-container"
-          center={[46.309547041230495, 2.5215414968572425]}
-          zoom={6}
-        >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
+        <div className={`map-container ${showForm ? "map-expanded" : ""}`}>
+          <MapContainer
+            className="map"
+            center={[46.309547041230495, 2.5215414968572425]}
+            zoom={6}
+          >
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
 
-          {promenades.map((promenade) => (
-            <Marker
-              position={[promenade.latitude, promenade.longitude]}
-              key={promenade.id}
-              icon={goldIcon}
-            >
-              <Popup>
-                <div>
-                  <h2>{promenade.name}</h2>
-                  <h2>{promenade.lieu}</h2>
-                  <p>{promenade.description}</p>
-                </div>
-              </Popup>
-            </Marker>
-          ))}
+            {promenades.map((promenade) => (
+              <Marker
+                position={[promenade.latitude, promenade.longitude]}
+                key={promenade.id}
+                icon={goldIcon}
+              >
+                <Popup>
+                  <div>
+                    <h2>{promenade.name}</h2>
+                    <h3>{promenade.lieu}</h3>
+                    <p>{promenade.description}</p>
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
 
-          <LocationMarker />
-        </MapContainer>
-
-        <div className="form-container">
-          {isAuthenticated ? (
-            <form onSubmit={handleSubmit} className="promenade-form">
-              <h2>Proposer une promenade</h2>
-              <p>
-                Cliquez sur la carte pour ajouter les points de latitude et
-                longitude au formulaire.
-              </p>
-              <div className="form-group">
-                <label>
-                  Latitude:
-                  <input
-                    type="number"
-                    step="any"
-                    name="latitude"
-                    value={formData.latitude}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="form-group">
-                <label>
-                  Longitude:
-                  <input
-                    type="number"
-                    step="any"
-                    name="longitude"
-                    value={formData.longitude}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="form-group">
-                <label>
-                  Lieu:
-                  <input
-                    type="text"
-                    name="lieu"
-                    value={formData.lieu}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="form-group">
-                <label>
-                  Description:
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    required
-                  >
-                    Description{" "}
-                  </textarea>
-                </label>
-              </div>
-              <div className="form-group">
-                <label>
-                  Nom:
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <button type="submit">Proposer</button>
-            </form>
-          ) : (
-            <div>
-              <h2>Vous devez être connecté pour proposer une promenade</h2>
-              <button type="button" onClick={() => navigate("/loggin")}>
-                Se connecter
-              </button>
-            </div>
-          )}
+            <LocationMarker />
+          </MapContainer>
         </div>
+
+        <button
+          className="toggle-form"
+          type="button"
+          onClick={() => setShowForm(!showForm)}
+        >
+          {showForm ? "›" : "‹"}
+        </button>
+
+        {showForm && (
+          <div className="form-container">
+            {isAuthenticated ? (
+              <form onSubmit={handleSubmit} className="promenade-form">
+                <h2>Proposer une promenade</h2>
+                <p>
+                  Cliquez sur la carte pour ajouter les points de latitude et
+                  longitude au formulaire.
+                </p>
+                <div className="form-group">
+                  <label>
+                    Latitude:
+                    <input
+                      type="number"
+                      step="any"
+                      name="latitude"
+                      value={formData.latitude}
+                      onChange={handleChange}
+                      required
+                    />
+                  </label>
+                </div>
+                <div className="form-group">
+                  <label>
+                    Longitude:
+                    <input
+                      type="number"
+                      step="any"
+                      name="longitude"
+                      value={formData.longitude}
+                      onChange={handleChange}
+                      required
+                    />
+                  </label>
+                </div>
+                <div className="form-group">
+                  <label>
+                    Lieu:
+                    <input
+                      type="text"
+                      name="lieu"
+                      value={formData.lieu}
+                      onChange={handleChange}
+                      required
+                    />
+                  </label>
+                </div>
+                <div className="form-group">
+                  <label>
+                    Description:
+                    <textarea
+                      name="description"
+                      value={formData.description}
+                      onChange={handleChange}
+                      required
+                    />
+                  </label>
+                </div>
+                <div className="form-group">
+                  <label>
+                    Nom:
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                    />
+                  </label>
+                </div>
+                <button type="submit">Proposer</button>
+              </form>
+            ) : (
+              <div>
+                <h2>Vous devez être connecté pour proposer une promenade</h2>
+                <button type="button" onClick={() => navigate("/loggin")}>
+                  Se connecter
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </>
   );

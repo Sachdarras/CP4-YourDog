@@ -10,19 +10,66 @@
   background-size: cover;
   background-position: center center;
 
-  width: auto;
+  width: 100%;
   height: 800px;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box; /* Inclut les paddings dans les dimensions de l'élément */
+
+  @media (max-width: 1200px) {
+    height: 600px;
+  }
+
+  @media (max-width: 992px) {
+    height: 500px;
+  }
+
+  @media (max-width: 768px) {
+    height: 400px;
+  }
+
+  @media (max-width: 576px) {
+    height: 300px;
+  }
 }
+
 .header-container h1 {
   color: $color-white;
-  font-size: 64px;
+  font-size: 4rem; /* Utiliser des unités relatives pour la taille de police */
   font-weight: bold;
   text-shadow: $text-entourage-black;
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+
+  @media (max-width: 768px) {
+    font-size: 3rem;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 2rem;
+  }
 }
 
 .header-container p {
-  font-size: 45px;
+  font-size: 2.5rem; /* Utiliser des unités relatives pour la taille de police */
   color: $color-gold;
   font-weight: bold;
   text-shadow: $text-entourage-black;
+  margin: 0;
+  padding: 0;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 1.5rem;
+  }
+}
+
+/* Ajuster le carrousel pour qu'il soit responsive également */
+.Caroussel {
+  width: 100%;
+  box-sizing: border-box;
 }

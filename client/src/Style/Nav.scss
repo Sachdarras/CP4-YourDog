@@ -1,44 +1,149 @@
-// src/Style/NavStyles.scss
-
+/* src/Style/NavStyles.scss */
 @use "../Style/Variable.scss" as *;
 
-.nav-container {
-  background-color: $color-gold;
+.bm-burger-button {
+  position: fixed;
+  width: 36px;
+  height: 30px;
+  right: 36px;
+  top: 36px;
+  z-index: 1000; /* Assurez-vous que le bouton est au-dessus du contenu */
+  transition: all 0.3s ease;
+}
 
-  ul {
-    font-family: $font-LM;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-  }
+.bm-burger-bars {
+  background: $color-gold;
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Légère ombre portée pour faire ressortir les barres */
+}
 
-  ul li a,
-  ul li .nav-link {
-    display: block;
+.bm-burger-bars:hover {
+  background: red; /* Changer la couleur au survol */
+}
+
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+.bm-cross {
+  background: red; /* Couleur de la croix */
+}
+
+.bm-cross::before,
+.bm-cross::after {
+  background: red; /* Couleur des barres de la croix */
+}
+
+.bm-menu {
+  background: $color-gold;
+  padding: 2.5em 1.5em 0;
+  font-size: 1.15em;
+  transition: transform 0.3s ease;
+}
+
+.bm-item-list {
+  color: $color-white;
+  padding: 0.8em;
+
+  a {
     color: $color-white;
-    text-align: center;
-    padding: 20px;
     text-decoration: none;
-    border-radius: 10px;
-    text-shadow: $text-entourage-black;
-    font-size: 24px;
     font-family: $font-LM;
-  }
+    font-size: 24px;
+    display: block;
+    margin: 30px 0;
+    transition: background-color 0.3s ease;
 
-  ul li a:hover,
-  ul li .nav-link:hover {
-    background-color: $color-white;
-    color: $color-gold;
-    text-shadow: $text-entourage-black;
+    &:hover {
+      color: $color-gold;
+      background-color: $color-white;
+      padding: 10px;
+      border-radius: 5px;
+    }
   }
 
   .nav-link {
     background: none;
     border: none;
     cursor: pointer;
+    color: $color-white;
+    font-family: $font-LM;
+    font-size: 24px;
+    margin: 15px 0;
+    text-align: left;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+
+    &:hover {
+      color: $color-gold;
+      background-color: $color-white;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  }
+}
+
+.bm-overlay {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Media Queries pour la Responsivité */
+@media (max-width: 768px) {
+  .bm-burger-button {
+    right: 20px;
+    top: 20px;
+    width: 30px;
+    height: 24px;
+  }
+
+  .bm-burger-bars {
+    height: 3px;
+  }
+
+  .bm-menu {
+    padding: 2em 1em 0;
+    font-size: 1em;
+  }
+
+  .bm-item-list {
+    padding: 0.5em;
+  }
+
+  .bm-item-list a,
+  .bm-item-list .nav-link {
+    font-size: 20px;
+    margin: 20px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .bm-burger-button {
+    right: 10px;
+    top: 10px;
+    width: 28px;
+    height: 22px;
+  }
+
+  .bm-burger-bars {
+    height: 2px;
+  }
+
+  .bm-menu {
+    padding: 1.5em 0.5em 0;
+    font-size: 0.9em;
+  }
+
+  .bm-item-list {
+    padding: 0.3em;
+  }
+
+  .bm-item-list a,
+  .bm-item-list .nav-link {
+    font-size: 18px;
+    margin: 15px 0;
   }
 }

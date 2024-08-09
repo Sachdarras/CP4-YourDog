@@ -282,8 +282,12 @@ function DogFriendly() {
       <div className="header-Dogfriendly">
         <h1>Lieux dog-Friendly</h1>
         <p>
-          Explorez de nouveaux lieux de promenade pour vous et votre compagnon à
-          quatre pattes.
+          Trouvez et partagez des lieux dog-friendly tels que des restaurants,
+          des hôtels, des campings et des plages où votre chien est le bienvenu
+          ! Utilisez notre carte interactive pour découvrir de nouveaux endroits
+          et ajoutez vos recommandations personnelles pour aider d'autres
+          passionnés de chiens à trouver les meilleurs spots pour eux et leurs
+          amis à quatre pattes.
         </p>
       </div>
       <div className="promenade-container">
