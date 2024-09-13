@@ -149,6 +149,7 @@ function DogFriendly() {
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [addingLocation, setAddingLocation] = useState(false);
+  const [showForm, setShowForm] = useState(false); // New state for form visibility
 
   const { isAuthenticated } = useContext(AuthContext);
 
@@ -331,90 +332,101 @@ function DogFriendly() {
 
         <div className="dog-friendly-container">
           {isAuthenticated ? (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleAddLocation();
-              }}
-              className="dog-friendly-form"
-            >
-              <h2>Ajouter un lieu dog-Friendly</h2>
-              <div className="form-group">
-                <label htmlFor="name">Nom du lieu:</label>
-                <input
-                  type="text"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="type">Type:</label>
-                <select
-                  id="type"
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  required
-                >
-                  <option value="">Sélectionnez un type</option>
-                  {placeTypes.map((placeType) => (
-                    <option key={placeType} value={placeType}>
-                      {placeType}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-group">
-                <label htmlFor="address">Adresse:</label>
-                <input
-                  type="text"
-                  id="address"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="ville">Ville:</label>
-                <input
-                  type="text"
-                  id="ville"
-                  value={ville}
-                  onChange={(e) => setVille(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="codePostal">Code Postal:</label>
-                <input
-                  type="text"
-                  id="codePostal"
-                  value={codePostal}
-                  onChange={handlePostalCodeChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="description">Description:</label>
-                <textarea
-                  id="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="price">Prix (optionnel):</label>
-                <input
-                  type="number"
-                  id="price"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                />
-              </div>
-              <button type="submit" disabled={addingLocation}>
-                {addingLocation ? "Ajout en cours..." : "Ajouter un lieu"}
+            <>
+              <button
+                className="toggle-form"
+                type="button"
+                onClick={() => setShowForm(!showForm)}
+              >
+                {showForm ? "›" : "‹"}
               </button>
-            </form>
+              {showForm && (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleAddLocation();
+                  }}
+                  className="dog-friendly-form"
+                >
+                  <h2>Ajouter un lieu dog-Friendly</h2>
+                  <div className="form-group">
+                    <label htmlFor="name">Nom du lieu:</label>
+                    <input
+                      type="text"
+                      id="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="type">Type:</label>
+                    <select
+                      id="type"
+                      value={type}
+                      onChange={(e) => setType(e.target.value)}
+                      required
+                    >
+                      <option value="">Sélectionnez un type</option>
+                      {placeTypes.map((placeType) => (
+                        <option key={placeType} value={placeType}>
+                          {placeType}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="address">Adresse:</label>
+                    <input
+                      type="text"
+                      id="address"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="ville">Ville:</label>
+                    <input
+                      type="text"
+                      id="ville"
+                      value={ville}
+                      onChange={(e) => setVille(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="codePostal">Code Postal:</label>
+                    <input
+                      type="text"
+                      id="codePostal"
+                      value={codePostal}
+                      onChange={handlePostalCodeChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="description">Description:</label>
+                    <textarea
+                      id="description"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="price">Prix (optionnel):</label>
+                    <input
+                      type="number"
+                      id="price"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                    />
+                  </div>
+                  <button type="submit" disabled={addingLocation}>
+                    {addingLocation ? "Ajout en cours..." : "Ajouter un lieu"}
+                  </button>
+                </form>
+              )}
+            </>
           ) : (
             <div className="not-authenticated-message">
               <h2>
